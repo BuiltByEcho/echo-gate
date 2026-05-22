@@ -2,7 +2,7 @@
 
 Echo Gate is the control plane for agent tools: registry, permissions, secret firewalling, receipts, limits, and paid-call readiness before an agent touches anything real.
 
-Status: private staging on the BuiltByEcho VPS. Do not announce, publish, or push publicly until Dustin explicitly approves it.
+Status: public v0 local-first release. Echo Gate is designed to run on the user's machine by default; no external database is required for the main product path.
 
 ## What v0 Does
 
@@ -23,14 +23,16 @@ Status: private staging on the BuiltByEcho VPS. Do not announce, publish, or pus
 ## Local Start
 
 ```bash
+npm install -g @builtbyecho/echo-gate
+echo-gate
+```
+
+For development from source:
+
+```bash
 npm install
 npm run build
 npm test
-```
-
-For a local smoke server:
-
-```bash
 ECHO_GATE_STORE=local npm run dev
 ```
 

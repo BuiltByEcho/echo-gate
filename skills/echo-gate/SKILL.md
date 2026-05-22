@@ -1,6 +1,6 @@
 ---
 name: echo-gate
-description: Use Echo Gate when registering, exposing, calling, securing, auditing, or operating agent-callable tools through the BuiltByEcho gateway. Covers tool registry entries, API keys, receipts, authenticated calls, Convex-backed state, private staging, VPS health checks, and the future x402 paid-tool path.
+description: Use Echo Gate when registering, exposing, calling, securing, auditing, or operating local-first agent-callable tools through the BuiltByEcho gateway. Covers tool registry entries, API keys, receipts, authenticated calls, local secret storage, approvals, spend limits, and future x402 paid-tool readiness.
 ---
 
 # Echo Gate
@@ -14,19 +14,19 @@ Use this skill when a task involves:
 - calling a tool through the gateway
 - checking receipts for tool calls
 - operating the VPS service
-- checking private staging health
+- checking local gateway health
 - preparing a tool for x402/Bankr paid access
 
 ## Current Status
 
-- Public staging base: `https://storage.builtbyecho.xyz/echo-gate`
-- Health: `https://storage.builtbyecho.xyz/echo-gate/health`
+- GitHub: `https://github.com/BuiltByEcho/echo-gate`
+- npm package: `@builtbyecho/echo-gate`
 - Local project: `projects/echo-gate`
 - Package: `@builtbyecho/echo-gate`
-- Convex project: `echo-gate`
-- Convex deployment: `dev:hearty-kookabura-959`
-- VPS PM2 processes: `echo-gate`, `echo-gate-caddy-route`
-- Status: private staging until Dustin explicitly approves public launch.
+- Default gateway: `http://localhost:8787`
+- Default state path: `~/.config/echo-gate`
+- Status: public v0 local-first release.
+- Convex mode: experimental opt-in only, not the default product path.
 
 ## API Surface
 
@@ -36,8 +36,12 @@ Use this skill when a task involves:
 - `POST /keys`
 - `GET /keys`
 - `DELETE /keys/:id`
+- `PUT /keys/:id/policies/:slug`
 - `POST /tools/:slug/call`
 - `GET /receipts`
+- `GET /approvals`
+- `POST /approvals/:id/decision`
+- `GET /approvals/:id/status`
 
 Admin routes require `Authorization: Bearer <ECHO_GATE_ADMIN_TOKEN>`.
 
@@ -46,6 +50,13 @@ Tool calls require `Authorization: Bearer egk_...`.
 ## CLI
 
 From the project root:
+
+```bash
+npm install -g @builtbyecho/echo-gate
+echo-gate
+```
+
+From source:
 
 ```bash
 npm run build
@@ -65,29 +76,26 @@ Use env vars:
 - `ECHO_GATE_KEY`
 - `ECHO_GATE_ADMIN_TOKEN`
 
-## VPS Operations
+## Operations
 
-Deploy only after local checks pass:
+Use local-first mode unless Dustin explicitly asks for remote deployment:
 
 ```bash
 npm run build
 npm test
-ECHO_GATE_ADMIN_TOKEN=... ECHO_GATE_PORT=8792 npm run deploy:vps
 ```
 
-Check live health:
+Check local health:
 
 ```bash
-curl -sS https://storage.builtbyecho.xyz/echo-gate/health
-ssh vps 'pm2 list --no-color | grep echo-gate'
+curl -sS http://localhost:8787/health
 ```
 
 Do not paste or store the admin token in chat, docs, memory, commits, or public issue comments.
 
 ## Release Rules
 
-- Do not announce publicly until Dustin explicitly approves.
 - Do not publish API keys.
 - Keep `echo` as the smoke tool until real adapters are ready.
-- Before launch, verify build, tests, public health, unauthenticated `401`, valid-key call, receipt write, and key revocation.
+- Before release or announcement, verify build, tests, local health, unauthenticated `401`, valid-key call, receipt write, and key revocation.
 - x402/Bankr paid tool calls are planned, not live yet.
