@@ -1,10 +1,10 @@
 {
-  "name": "@builtbyecho/echo-gate",
+  "name": "echo-gate",
   "version": "0.1.0",
   "description": "Control layer for agent tools: registry, permissions, receipts, limits, and paid-call readiness.",
   "type": "module",
   "bin": {
-    "echo-gate": "./bin/echo-gate.js"
+    "echo-gate": "bin/echo-gate.js"
   },
   "files": [
     "bin/",

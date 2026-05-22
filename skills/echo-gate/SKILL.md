@@ -20,9 +20,9 @@ Use this skill when a task involves:
 ## Current Status
 
 - GitHub: `https://github.com/BuiltByEcho/echo-gate`
-- npm package: `@builtbyecho/echo-gate`
+- npm package: `echo-gate`
 - Local project: `projects/echo-gate`
-- Package: `@builtbyecho/echo-gate`
+- Package: `echo-gate`
 - Default gateway: `http://localhost:8787`
 - Default state path: `~/.config/echo-gate`
 - Status: public v0 local-first release.
@@ -52,7 +52,7 @@ Tool calls require `Authorization: Bearer egk_...`.
 From the project root:
 
 ```bash
-npm install -g @builtbyecho/echo-gate
+npm install -g echo-gate
 echo-gate
 ```
 

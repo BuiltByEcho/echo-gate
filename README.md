@@ -23,7 +23,7 @@ Status: public v0 local-first release. Echo Gate is designed to run on the user'
 ## Local Start
 
 ```bash
-npm install -g @builtbyecho/echo-gate
+npm install -g echo-gate
 echo-gate
 ```
 

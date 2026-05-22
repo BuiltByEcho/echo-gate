@@ -5,7 +5,7 @@ Echo Gate v0 is public as a local-first CLI release. The default product path ru
 ## Current Live Surface
 
 - GitHub: `https://github.com/BuiltByEcho/echo-gate`
-- npm: `@builtbyecho/echo-gate`
+- npm: `echo-gate`
 - CLI: `echo-gate`
 - Primary data path: local state and local secret storage.
 - Optional remote prototype: Convex remains experimental and opt-in only.
