@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { execFile } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
 import { promisify } from "node:util";
 import chalk from "chalk";
@@ -22,6 +23,8 @@ const baseUrl = () => process.env.ECHO_GATE_URL ?? "http://localhost:8787";
 const adminToken = () => process.env.ECHO_GATE_ADMIN_TOKEN;
 const apiKey = () => process.env.ECHO_GATE_KEY;
 const execFileAsync = promisify(execFile);
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const packagedServerPath = resolve(scriptDir, "../dist/src/server.js");
 const keychainService = "com.builtbyecho.echo-gate.secret";
 const keychainTimeoutMs = 30_000;
 
@@ -478,6 +481,7 @@ function validateCliPolicy(policy) {
 }
 
 async function runTui() {
+  const startedServer = await ensureLocalGateway();
   const terminal = new ProcessTerminal();
   const tui = new TUI(terminal);
   const dashboard = new Dashboard(tui);
@@ -494,6 +498,40 @@ async function runTui() {
 
   tui.start();
   await dashboard.refresh();
+  if (startedServer) {
+    process.once("exit", () => {
+      startedServer.kill();
+    });
+  }
+}
+
+async function ensureLocalGateway() {
+  if (process.env.ECHO_GATE_NO_AUTOSTART === "1") return null;
+  if (process.env.ECHO_GATE_URL) return null;
+
+  const existing = await safeRequest("/health");
+  if (existing.ok) return null;
+
+  const child = spawn(process.execPath, [packagedServerPath], {
+    env: {
+      ...process.env,
+      ECHO_GATE_BIND: process.env.ECHO_GATE_BIND ?? "127.0.0.1",
+      ECHO_GATE_PORT: process.env.ECHO_GATE_PORT ?? "8787",
+      ECHO_GATE_STORE: process.env.ECHO_GATE_STORE ?? "local",
+    },
+    stdio: "ignore",
+    detached: false,
+  });
+  child.unref();
+
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await delay(100);
+    const health = await safeRequest("/health");
+    if (health.ok) return child;
+    if (child.exitCode !== null) break;
+  }
+
+  return null;
 }
 
 class Dashboard {
@@ -1437,6 +1475,10 @@ function rule(width) {
 
 function fit(line, width) {
   return visibleWidth(line) > width ? truncateToWidth(line, width) : line;
+}
+
+function delay(ms) {
+  return new Promise((resolveDelay) => setTimeout(resolveDelay, ms));
 }
 
 function accessRows(keys) {
