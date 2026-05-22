@@ -1277,7 +1277,7 @@ function asciiWordmark(width) {
     const paints = [
       chalk.hex("#38BDF8").bold,
       chalk.hex("#0EA5E9").bold,
-      chalk.hex("#E0F2FE").bold,
+      chalk.hex("#7DD3FC").bold,
       chalk.hex("#60A5FA").bold,
       chalk.hex("#2563EB").bold,
       chalk.hex("#1E3A8A").bold,
