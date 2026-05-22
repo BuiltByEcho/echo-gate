@@ -1,6 +1,6 @@
 {
   "name": "@builtbyecho/echo-gate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Control layer for agent tools: registry, permissions, receipts, limits, and paid-call readiness.",
   "type": "module",
   "bin": {
