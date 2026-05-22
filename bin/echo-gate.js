@@ -25,13 +25,14 @@ const apiKey = () => process.env.ECHO_GATE_KEY;
 const execFileAsync = promisify(execFile);
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packagedServerPath = resolve(scriptDir, "../dist/src/server.js");
+const packageJson = JSON.parse(await readFile(resolve(scriptDir, "../package.json"), "utf8"));
 const keychainService = "com.builtbyecho.echo-gate.secret";
 const keychainTimeoutMs = 30_000;
 
 program
   .name("echo-gate")
   .description("CLI for Echo Gate")
-  .version("0.1.0");
+  .version(packageJson.version);
 
 program.command("health")
   .description("Check gateway health")
