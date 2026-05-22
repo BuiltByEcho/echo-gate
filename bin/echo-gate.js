@@ -749,7 +749,7 @@ class Dashboard {
     }
     const tagline = `${statusDot("green")} ${chalk.dim("local-first")}   ${statusDot("cyan")} ${chalk.dim("human-controlled")}   ${statusDot("blue")} ${chalk.dim("audited")}`;
     const title = `${chalk.dim("╔════════════════════════════════════════════╗")}
-${chalk.dim("║")}  ${chalk.hex("#2DD4BF").bold("ECHO GATE")}  ${chalk.dim("|")}  ${chalk.dim("local-first tool firewall")}   ${chalk.dim("║")}
+${chalk.dim("║")}  ${chalk.hex("#38BDF8").bold("ECHO GATE")}  ${chalk.dim("|")}  ${chalk.dim("local-first tool firewall")}   ${chalk.dim("║")}
 ${chalk.dim("╚════════════════════════════════════════════╝")}`;
     return [
       ...asciiWordmark(width),
@@ -1276,17 +1276,17 @@ function asciiWordmark(width) {
   if (width >= 80) {
     const paints = [
       chalk.hex("#38BDF8").bold,
-      chalk.hex("#22D3EE").bold,
+      chalk.hex("#0EA5E9").bold,
       chalk.hex("#E0F2FE").bold,
-      chalk.hex("#5EEAD4").bold,
-      chalk.hex("#2DD4BF").bold,
-      chalk.hex("#0F766E").bold,
+      chalk.hex("#60A5FA").bold,
+      chalk.hex("#2563EB").bold,
+      chalk.hex("#1E3A8A").bold,
     ];
     return dense.map((line, index) => center(paints[index](line), width));
   }
 
   return compact.map((line, index) => {
-    const paint = index % 2 === 0 ? chalk.white.bold : chalk.hex("#2DD4BF").bold;
+    const paint = index % 2 === 0 ? chalk.white.bold : chalk.hex("#38BDF8").bold;
     return center(paint(line), width);
   });
 }
