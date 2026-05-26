@@ -78,7 +78,7 @@ Use env vars:
 
 ## Operations
 
-Use local-first mode unless Dustin explicitly asks for remote deployment:
+Use local-first mode unless the operator explicitly asks for remote deployment:
 
 ```bash
 npm run build
