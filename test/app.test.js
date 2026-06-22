@@ -1124,8 +1124,15 @@ test("local state and file secrets are written with private permissions", async 
 
     const stateMode = (await stat(join(dir, "state.json"))).mode & 0o777;
     const secretMode = (await stat(localSecretPath())).mode & 0o777;
-    assert.equal(stateMode, 0o600);
-    assert.equal(secretMode, 0o600);
+    if (process.platform === "win32") {
+      // Windows does not expose POSIX private-file modes consistently through stat().
+      // The implementation still uses 0600/chmod best-effort; verify the files exist.
+      assert.ok(stateMode > 0);
+      assert.ok(secretMode > 0);
+    } else {
+      assert.equal(stateMode, 0o600);
+      assert.equal(secretMode, 0o600);
+    }
   } finally {
     if (previousStateDir === undefined) delete process.env.ECHO_GATE_STATE_DIR;
     else process.env.ECHO_GATE_STATE_DIR = previousStateDir;

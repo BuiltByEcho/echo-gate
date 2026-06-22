@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { chmod, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { homedir } from "node:os";
 import { nanoid } from "nanoid";
@@ -278,6 +278,7 @@ export class LocalControlPlane implements ControlPlane {
     await mkdir(dirname(this.statePath), { recursive: true, mode: 0o700 });
     await writeFile(tmp, `${JSON.stringify(this.state, null, 2)}\n`, { mode: 0o600 });
     await rename(tmp, this.statePath);
+    await chmod(this.statePath, 0o600).catch(() => undefined);
   }
 }
 

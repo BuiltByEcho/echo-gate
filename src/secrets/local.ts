@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { chmod, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { homedir } from "node:os";
 import { promisify } from "node:util";
@@ -109,6 +109,7 @@ async function saveSecretState(state: LocalSecretState): Promise<void> {
   await mkdir(dirname(path), { recursive: true, mode: 0o700 });
   await writeFile(tmp, `${JSON.stringify(state, null, 2)}\n`, { mode: 0o600 });
   await rename(tmp, path);
+  await chmod(path, 0o600).catch(() => undefined);
 }
 
 function activeSecretBackend(): SecretBackend {
